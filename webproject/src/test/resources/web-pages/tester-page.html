@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="english">
+<head>
+  <img src="https://i0.wp.com/metro.co.uk/wp-content/uploads/2018/12/snake_ssbu-690e.jpg?quality=90&strip=all&zoom=1&resize=644%2C457&ssl=1">
+  
+    <title>Metal Gear bug catcher tester page</title>
+</head>
+<body>
+    <h1>Metal gear bug catcher Tester page</h1>
+
+    <button id="lookup Defect" onclick="lookupMyDefects()">lookup Defects</button>
+    
+    <h3>Hi,Solid Snake <span id="username">-</span></h3>
+
+    <h3>My Pending Defects:</h3>
+    <p id="defectsList"></p>
+
+    <h3>My Accepted Defects:</h3>
+    <p id="defectsAcceptedList"></p>
+
+    <h3>My declined Defects:</h3>
+    <p id="defectsDeclinedList"></p>
+    
+<script>
+    
+
+    async function lookupMyDefects() {
+
+       
+        const httpResponse = await fetch("https://bugcatcher.coe.revaturelabs.com/11/defects/")
+
+        const body = await httpResponse.json();
+
+        console.log(body);
+
+        //Match the assignedTo aginst the LoggedInUser (need to implement).
+    
+        
+
+        filteredDefects = body.filter(defect => defect.assignedTo == "Solid Snake") //defect.assignedTo == loggedInUser.username
+        
+        console.log("Filtered List of Defects")
+
+        console.log(filteredDefects);
+
+        defectsList = document.getElementById("defectsList");
+        defectsList.innerHTML=""
+        //defectsAcceptedList= body.filter(defect=> defect.assignedTo=="acceptDefect")
+        //let defectsAcceptedList= document.getElementById("defectsAcceptedList")
+        //defectsList.innerHTML = "";
+        filteredDefects.forEach(defect => defectsList.innerHTML += "ID: " + defect.defectId + "\tDescription: " + 
+        defect.desc +`<button onclick="acceptDefect(${defect.defectId})">Accept</button>` + 
+        `<button onclick="declineDefect(${defect.defectId})">Decline</button>` + "<br>")
+        
+        //defectsAcceptedList.innerHTML=""
+        //filteredDefects.forEach(defect => defectsAcceptedList.innerHTML += "ID: " + defect.defectId + "\tDescription: " + defect.desc+"<br>")
+        
+    }  
+
+    async function acceptDefect(defectId) {
+
+            let accept={
+            status: "Accepted"
+            }
+             let config = {
+            method:"PATCH", 
+            headers:{'Content-Type':"application/json"},
+            body: JSON.stringify(accept)
+
+    }
+        const httpResponse= await fetch (`https://bugcatcher.coe.revaturelabs.com/11/defects/${defectId}`,config)
+        lookupMyDefects()
+
+    // const body =await httpResponse.json()
+        //fetch request - PATCH - /defects/<defectId>
+       
+        }
+
+    async function declineDefect(defectId) {
+        let decline={
+        status: "Declined"
+        }
+        let config = {
+        method:"PATCH", 
+        headers:{'Content-Type':"application/json"},
+        body: JSON.stringify(decline)
+    }
+    const httpResponse= await fetch (`https://bugcatcher.coe.revaturelabs.com/11/defects/${defectId}`,config)
+    lookupMyDefects()
+
+    // credit given to eric,ryan,and richard for help with this code, thanks
+}   
+
+    
+   
+        //fetch request - PATCH - /defects/<defectId>
+        //body: {
+        // "status": "Declined";
+        //  }
+
+
+    
+
+// lookupDefect()
+  
+
+    
+        // Set the innerHTML of the span element with ID username = loggedInUser.username
+    </script>
+  
+    </body>
+   
+</html>
+    

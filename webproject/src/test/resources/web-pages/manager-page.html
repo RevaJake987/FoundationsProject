@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <img src=http://vrworld.com/wp-content/uploads/2015/03/Hideo-Kojima.jpg>
+  
+    <title>Metal Gear bug catcher manager page</title>
+</head>
+<body>
+
+
+    <h1>Metal gear bug catcher manager page</h1>
+    <label>Defect Name/Description: <input name="defect" id="defect" type="text" placeholder="defect name"></label><br>
+    <input name ="datereported" id="datereported" type="date"><br>
+    <input name="stepstoreproduce" id="stepstoreproduce" type="text" placeholder="stepstoreproduce"><br>
+
+    <select name="testername" id="testername">
+
+        <option value="">Tester Username</option>
+   
+    </select><br>
+
+    <select name="severity" id="severity">
+        <option value="Low">Severity</option>
+        <option>Low</option>
+    </select><br>
+    <select name="priority" id="priority">
+        <option value="Low">priority</option>
+        <option>Low</option>
+    </select><br>
+
+    <button id="assignTester">assign</button>
+    
+    <script>
+
+async function assignDefect(){
+   
+
+    const defect = document.getElementById("defect")
+    const testername = document.getElementById("testername")
+    const dateReported = document.getElementById("datereported")
+    const stepstoreproduce = document.getElementById("stepstoreproduce")
+    const severity = document.getElementById("severity")
+    const priority = document.getElementById("priority")
+    // Combine it into a custom object
+    // date string must be converted to int for API
+    t = new Date(dateReported.value).getTime();
+    let httpRequestBody = {
+        desc:defect.value,
+        dateReported:t, 
+        assignedTo:testername[testername.selectedIndex].value,
+        stepsToReproduce:stepstoreproduce.value,
+        severity:severity[severity.selectedIndex].value,
+        priority:priority[priority.selectedIndex].value,
+    }   
+        console.log(httpRequestBody)
+    // Set up the configuration for the FETCH command to the Api
+    let config = {
+        method:"POST", // method is a reference to the kind of request you are making (the verb): GET is the default
+        headers:{'Content-Type':"application/json"}, // some APIs will return an error message without this value included
+        body: JSON.stringify(httpRequestBody) // stringify converts a JavaScript object into a json
+    }
+
+    // Send the information to the API using FETCH
+    const httpResponse = await fetch("https://bugcatcher.coe.revaturelabs.com/11/defects", config); // notice we added the config object
+
+    console.log(httpResponse.status);
+
+
+    // Get the response from the API
+    // Interpret the response and respond accordingly (defect added or not)
+    if (httpResponse.status != 201){
+        alert ("The defect was not assigned")
+    const responseBody = await httpResponse.json(); // converts the response body json into a JavaScript object
+     console.log(responseBody)
+        return
+    }else{
+        alert ("The defect was assigned")
+    }
+
+   
+    // if (responseBody.role === "Manager"){
+    //     window.location.assign("manager.html")
+    // } else if (responseBody.role === "Tester") {
+    //     window.location.assign("tester.html")
+    // }
+   
+}
+
+async function setup() {
+    const button = document.getElementById("assignTester")
+    button.addEventListener('click', assignDefect)
+
+    // Contact API to get valid employee usernames
+    // Then populate the select with these names
+    let config = {
+        method:"GET", // method is a reference to the kind of request you are making (the verb): GET is the default
+        headers:{'Content-Type':"application/json"}, // some APIs will return an error message without this value included
+    }
+
+    // Send the information to the API using FETCH
+    const httpResponse = await fetch("https://bugcatcher.coe.revaturelabs.com/11/employees", config); // notice we added the config object
+    const responseBody = await httpResponse.json(); // converts the response body json into a JavaScript object
+
+    // Loop through the responseBody
+    // For any employee that is a tester (role) add the username to the testername select dropdown in the form
+    let sel = document.getElementById("testername")
+    for (let obj of responseBody) {
+        if (obj.role == "Tester") {
+            let option = document.createElement("option")
+            option.text = obj.username
+            sel.add(option)
+
+                
+    // credit given to nirlouse for help with this code, thanks
+        }
+    }
+}
+
+    setup()
+
+    </script>
+    
+        
+    </body>
+    
+    // credit given to nirlouse for help with this code, thank you
+</html>

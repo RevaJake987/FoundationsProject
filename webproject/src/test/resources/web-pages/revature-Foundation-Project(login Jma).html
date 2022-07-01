@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <img src="https://1.bp.blogspot.com/-3dzvALZubsM/T_wjPxvACnI/AAAAAAAAACU/h_qM7Ziwr80/s1600/Metal_Gear_Solid_1_ascensor.jpg">
+    <title>Metal Gear BUG-CATCHER</title>
+</head>
+<body>
+<h1>welcome to Metal Gear Bug catcher homepage</h1> 
+
+
+
+<h1> login </h1>  
+<p>Username</p>
+<input type="text" id="username">
+<p>Password</p>
+<input type="password" id="password">
+<button onclick="login()">login</button>
+</body>
+<script>
+async function login(){
+   //number one: create object
+    let loginInfo= {
+    username: document.getElementById("username").value,
+    password: document.getElementById("password").value
+    }
+
+    //number two: convert object to .JSON
+    let loginJSON = JSON.stringify(loginInfo);
+    
+
+    //number three: configuring the request for the .JSON object
+    let config = {
+    method:"PATCH", 
+    headers:{'Content-Type':"application/json"},
+    body: loginJSON
+    }
+    //number four:making the request
+    let httpresponse=await fetch("https://bugcatcher.coe.revaturelabs.com/11/login",config);
+    if(httpresponse.status===200){
+        let responseBody = await httpresponse.json();
+        console.log(responseBody);
+
+        //create a global veriable loggedInUser = responseBody
+        
+        //number five: act on/display results of request 
+        if(responseBody.role=="Tester"){
+            window.location.href="tester-page.html"
+        }else{
+            window.location.href="manager-page.html"
+        }
+        }else{
+            let responseBody=await httpresponse.json()
+            alert(responseBody.detail)
+        }
+          // credit given to eric for help with this code, thanks
+    }
+
+    
+        </script>
+       </html>
