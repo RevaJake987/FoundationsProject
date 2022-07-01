@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>BUG-CATCHER</title>
+</head>
+<body>
+<h1>welcome to my Bug catcher homepage</h1> 
+
+<img src="https://pics.clipartpng.com/midle/Fly_PNG_Clip_Art-2610.png" />
+
+<h1> login </h1>  
+<p>Username</p>
+<input type="text" id="userelement">
+<p>Password</p>
+<input type="password" id="passelement">
+<button onclick="login()">login</button>
+</body>
+<script>
+async function login(){
+    let loginInfo= {
+    username: document.getElementById("userelement").value,
+    password: document.getElementById("passelement").value
+    }
+
+    let loginJSON = JSON.stringify(loginInfo);
+    
+    let config = {
+    method:"PATCH", 
+    headers:{'Content-Type':"application/json"},
+    body: loginJSON
+    }
+    let httpresponse=await fetch("https://bugcatcher.coe.revaturelabs.com/11/login",config);
+    if(httpresponse.status===200){
+        let responseBody = await httpresponse.json();
+        console.log(responseBody);
+
+        if(responseBody.role=="Tester"){
+            window.location.href="tester-page.html"
+        }else{
+            window.location.href="manager-page.html"
+        }
+        }else{
+            let responseBody=await httpresponse.json()
+            alert(responseBody.detail)
+        }
+    }
+
+    
+        </script>
+       </html>
