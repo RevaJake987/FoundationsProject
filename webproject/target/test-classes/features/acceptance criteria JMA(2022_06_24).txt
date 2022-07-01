@@ -1,0 +1,62 @@
+Manager Acceptance Criteria
+
+FEATURE    Managers should be able to login to access their homepages
+
+    SCENARIO   As a manager I want to sign in so I can view my custom homepage
+
+        GIVEN   the manager is on the login page
+        WHEN    the manager enters his correct username
+        WHEN    the manager enters his correct password
+        WHEN    the manager clicks the login button
+        THEN    the manager should be logged in to the manager home page
+
+    SCENARIO    As a manager i should be able to create defects so that the tester can address them
+
+        GIVEN The manager is logged into the manager custom homepage and creates a defect
+        WHEN  The manager enters the name of the defect and creates it
+        WHEN  The manager enters the name of the tester to test the defect
+        THEN  The manager has created the defect and needs to assign the defect
+
+    
+    SCENARIO    As a Manager i should be able to assign the defect that was created to an individual tester
+
+        GIVEN   The manager created a defect and entered the name of the tester
+        WHEN    The defect is created and the tester is chosen
+        WHEN    The tester is named to test the defect
+        THEN    The tester is assigned the defect by the manager via the assign button
+
+Tester Acceptance Criteria
+
+FEATURE:    Testers should be able to login to access their homepages
+
+    SCENARIO:   As a tester I want to sign in so I can view my custom homepage
+
+GIVEN   the tester is on the login page
+WHEN    the tester enters his correct username
+WHEN    the tester enters his correct password
+WHEN    the tester clicks the login button
+THEN    the tester should be logged in to the tester home page
+
+    SCENARIO: as a tester i want to be able to view the defect assigned to me by my manager
+
+GIVEN: tester is logged into the homepage and can see the defect name 
+WHEN:  tester is viewing the Defect name column and can accept the defect assigned to them
+WHEN:  tester accepts the defect assigned to them 
+WHEN:  tester decides to either fix/shelve or reject the defect
+THEN:  tester finalizes the defect and finishes the assignment
+
+    Scenario: update from pending to accepted
+
+GIVEN: tester has viewed the defect and decided to test it
+WHEN:  tester is logged into the tester custom home webpage  
+WHEN:  tester views the defect in the name column and accepts the defect in the accept column
+WHEN:  tester accepts the defect in the accept column and decides whether to fix,reject or shelve the defect
+THEN:  tester has finished the defect and uploads it to the webpage
+
+    Scenario: update from pending to rejected
+GIVEN: tester has viewed the defect and decides to reject or shelve the defect
+WHEN:  tester is logged into the tester custom home webpage  
+WHEN:  tester views the defect in the name column and rejects the defect in the accept column
+THEN:  tester has rejected the defect
+
+
